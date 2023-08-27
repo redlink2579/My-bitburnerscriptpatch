@@ -3,12 +3,13 @@ export async function main(ns) {
   const host = ns.getHostname();
   const target = ns.args[0];
   const maxmoney = ns.getServerMaxMoney(target);
+  let money = ns.getServerMoneyAvailable(target);
 
   while (true) {
     if (currentsec > minsecurity) {
       let currentsec = ns.getServerSecurityLevel(target);
       const minsecurity = ns.getServerMinSecurityLevel(target);
-      const threads = Math.ceil( ns.growthAnalyze(target,maxmoney / money, 1));
+      const threads = Math.ceil((currentsec - minsecurity) / ns.weakenAnalyze(1));
       const weakenram = ns.getScriptRam("weaken.js");
       const needram = Math.ceil(weakenram * threads);
       const weakentime = ns.formulas.hacking.weakenTime(ns.getServer(target), ns.getPlayer()) + 10;
@@ -25,7 +26,7 @@ export async function main(ns) {
         }
       };
     } else if (money < maxmoney) {
-      const threads = math.celi(ns.growthAnalyze(target, 1, 1));
+      const threads = Math.ceil( ns.growthAnalyze(target,maxmoney / money, 1));
       const growram = ns.getScriptRam("grow.js");
       var needram = Math.ceil(growram * threads);
       var growtime = ns.formulas.hacking.growTime(ns.getServer(target), ns.getPlayer()) + 10;
